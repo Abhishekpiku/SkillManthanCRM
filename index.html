@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>CallFlow CRM - Skill Manthan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+  <!-- LOGIN VIEW -->
+  <div class="auth-wrapper" id="authView">
+    <div class="auth-card">
+      <div class="auth-hero">
+        <div class="auth-hero-header">
+          <div class="badge-pill">
+            <i class="fa-solid fa-circle-nodes"></i>
+            Unified CRM workspace
+          </div>
+          <h1>Smart calling CRM dashboard</h1>
+          <p>
+            Manage leads, track calls, and capture feedback in a single clean
+            interface for admins and employees.
+          </p>
+
+          <div class="hero-metrics">
+            <div class="metric-card">
+              <div class="metric-label">Today calls logged</div>
+              <div class="metric-value" id="heroCallsValue">0</div>
+              <div class="metric-trend">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+                Live session
+              </div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Conversion rate</div>
+              <div class="metric-value" id="heroConvRate">0%</div>
+              <div class="metric-trend">
+                <i class="fa-solid fa-bolt"></i>
+                Updated when feedback saved
+              </div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Active employees</div>
+              <div class="metric-value" id="heroEmployees">0</div>
+              <div class="metric-trend">
+                <span class="status-pill-live"></span>
+                Real-time presence
+              </div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Assigned clients</div>
+              <div class="metric-value" id="heroClients">0</div>
+              <div class="metric-trend">
+                <i class="fa-solid fa-filter"></i>
+                Filter by status instantly
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-hero-footer">
+          <i class="fa-solid fa-shield-heart"></i>
+          Role-based access · Data stays in your browser (local demo mode)
+        </div>
+      </div>
+
+      <div class="auth-form-container">
+        <div class="auth-tabs">
+          <div class="auth-tab-buttons">
+            <button class="auth-tab-btn active" data-role="admin" id="adminTabBtn">
+              <span class="pulse-ring"></span>
+              <i class="fa-solid fa-user-gear"></i>
+              Admin Login
+            </button>
+            <button class="auth-tab-btn" data-role="employee" id="employeeTabBtn">
+              <span class="pulse-ring"></span>
+              <i class="fa-solid fa-user-tie"></i>
+              Employee Login
+            </button>
+          </div>
+          <div class="logo-mini">
+            <span><i class="fa-solid fa-wave-square"></i></span>
+            CallFlow CRM
+          </div>
+        </div>
+
+        <h2 class="auth-title" id="authTitle">Welcome back, Admin</h2>
+        <div class="auth-subtitle" id="authSubtitle">
+          Sign in as administrator to manage employees, assign leads, and track
+          performance in real time.
+        </div>
+
+        <form id="loginForm">
+          <div class="form-grid">
+            <div class="form-field">
+              <div class="input-wrapper">
+                <i class="fa-solid fa-at"></i>
+                <input type="text" id="loginUserId" class="input-control" placeholder="Enter your user ID"
+                  autocomplete="username" required />
+              </div>
+            </div>
+            <div class="form-field">
+              <div class="input-wrapper">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="loginPassword" class="input-control" placeholder="Enter your password"
+                  autocomplete="current-password" required />
+              </div>
+            </div>
+          </div>
+
+          <div class="login-actions">
+            <label class="remember">
+              <input type="checkbox" id="rememberMe" />
+              <span>Remember this device</span>
+            </label>
+            <button type="submit" class="btn-primary">
+              <span class="btn-glow"></span>
+              <span id="loginBtnText">Login as Admin</span>
+              <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </button>
+          </div>
+
+          <div class="login-meta">
+            <span class="status-dot"></span>
+            Local demo instance · No backend required
+          </div>
+          <div class="error-text" id="loginError"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP SHELL -->
+  <div class="app-shell" id="appShell">
+    <!-- SIDEBAR - TOGGLEABLE -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <div class="sidebar-logo">
+            <i class="fa-solid fa-headset"></i>
+          </div>
+          <span>CallFlow CRM</span>
+        </div>
+        <div class="sidebar-badge" id="sidebarRoleBadge">
+          <i class="fa-solid fa-circle-user"></i>
+          Admin
+        </div>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-section-label">Main</li>
+        <li class="nav-item">
+          <a href="#" class="nav-link active" data-view="dashboard">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Overview</span>
+            <span class="nav-pill">
+              <span class="pill-dot"></span>
+              Live
+            </span>
+          </a>
+        </li>
+        <li class="nav-item admin-only">
+          <a href="#" class="nav-link" data-view="employees">
+            <i class="fa-solid fa-users-gear"></i>
+            <span>Employees</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-view="clients">
+            <i class="fa-solid fa-users-rectangle"></i>
+            <span>Clients</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-view="feedback">
+            <i class="fa-solid fa-comments"></i>
+            <span>Feedback</span>
+          </a>
+        </li>
+
+        <li class="sidebar-section-label">Data</li>
+        <li class="nav-item admin-only">
+          <a href="#" class="nav-link" data-view="importExport">
+            <i class="fa-solid fa-file-import"></i>
+            <span>Import / Export</span>
+          </a>
+        </li>
+      </ul>
+      <div class="sidebar-footer">
+        <span>
+          <i class="fa-solid fa-circle-dot"></i>
+          <span id="sidebarPresence">All changes saved locally</span>
+        </span>
+        <span id="sidebarTime"></span>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars" id="menuIcon"></i>
+          </button>
+          <div class="topbar-page-title" id="topbarTitle">
+            Overview
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="search-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search clients, phone, status..." />
+            <span class="clear-search" id="clearSearch">
+              <i class="fa-solid fa-xmark"></i>
+            </span>
+          </div>
+          <div class="topbar-user" id="topbarUser">
+            <div class="user-avatar" id="userAvatar">A</div>
+            <div class="user-info">
+              <span class="user-name" id="userNameTop">Admin User</span>
+              <span class="user-role" id="userRoleTop">Admin</span>
+            </div>
+          </div>
+          <button class="btn-ghost" id="logoutBtn">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <main class="content">
+        <!-- DASHBOARD VIEW -->
+        <section class="view" id="view-dashboard">
+          <div class="cards-row">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fa-solid fa-phone-volume"></i>
+              </div>
+              <div class="stat-body">
+                <div class="stat-label">Total calls logged</div>
+                <div class="stat-value" id="statTotalCalls">0</div>
+                <div class="stat-sub">
+                  <i class="fa-solid fa-circle-arrow-up"></i>
+                  Includes all employees
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fa-solid fa-bullseye"></i>
+              </div>
+              <div class="stat-body">
+                <div class="stat-label">Converted clients</div>
+                <div class="stat-value" id="statConverted">0</div>
+                <div class="stat-sub">
+                  <i class="fa-solid fa-arrow-trend-up"></i>
+                  <span id="statConvRate">0%</span> conversion
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fa-solid fa-users-viewfinder"></i>
+              </div>
+              <div class="stat-body">
+                <div class="stat-label">Active employees</div>
+                <div class="stat-value" id="statEmployees">0</div>
+                <div class="stat-sub bad">
+                  <i class="fa-solid fa-location-crosshairs"></i>
+                  Real-time presence
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fa-solid fa-filter-circle-dollar"></i>
+              </div>
+              <div class="stat-body">
+                <div class="stat-label">Follow-ups pending</div>
+                <div class="stat-value" id="statFollowUps">0</div>
+                <div class="stat-sub bad">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                  Time to prioritize
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-layout">
+            <div class="panel admin-only">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <i class="fa-solid fa-users-gear"></i>
+                  Employee performance snapshot
+                </div>
+                <div class="panel-actions">
+                  <span class="chip">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                    Calls per employee
+                  </span>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Employee</th>
+                      <th>Assigned</th>
+                      <th>Calls Logged</th>
+                      <th>Converted</th>
+                      <th>Last Active</th>
+                    </tr>
+                  </thead>
+                  <tbody id="employeeStatsBody">
+                    <!-- Filled by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <i class="fa-solid fa-list-check"></i>
+                  Live client status overview
+                </div>
+                <div class="panel-actions">
+                  <button class="pill-filter active" data-status-filter="all">
+                    <i class="fa-solid fa-layer-group"></i>
+                    All
+                  </button>
+                  <button class="pill-filter" data-status-filter="Follow-up">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    Follow-up
+                  </button>
+                  <button class="pill-filter" data-status-filter="Converted">
+                    <i class="fa-solid fa-star"></i>
+                    Converted
+                  </button>
+                  <button class="pill-filter" data-status-filter="Not Interested">
+                    <i class="fa-solid fa-ban"></i>
+                    Not interested
+                  </button>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Client</th>
+                      <th>Contact</th>
+                      <th>Assigned To</th>
+                      <th>Status</th>
+                      <th>Last Feedback</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboardClientsBody">
+                    <!-- Filled by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- EMPLOYEES VIEW (ADMIN) -->
+        <section class="view" id="view-employees" style="display: none">
+          <div class="tab-layout">
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <i class="fa-solid fa-user-plus"></i>
+                  Create new employee
+                </div>
+                <div class="panel-actions">
+                  <span class="tag">
+                    <i class="fa-solid fa-key"></i>
+                    Role: Employee only
+                  </span>
+                </div>
+              </div>
+              <form id="employeeForm">
+                <div class="form-inline-row">
+                  <div class="form-field">
+                    <label class="form-label">Employee Name</label>
+                    <input type="text" id="empName" class="input-control" placeholder="Full name" required />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">Email / Phone</label>
+                    <input type="text" id="empContact" class="input-control" placeholder="Email or phone" required />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">User ID</label>
+                    <input type="text" id="empUserId" class="input-control" placeholder="Unique login ID" required />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="empPassword" class="input-control" placeholder="Login password"
+                      required />
+                  </div>
+                  <div class="form-field" style="max-width: 140px">
+                    <label class="form-label">Role</label>
+                    <input type="text" class="input-control" value="Employee" disabled />
+                  </div>
+                  <div class="form-field" style="max-width: 150px">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn-outline alt">
+                      <i class="fa-solid fa-plus"></i>
+                      Add Employee
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <div class="divider"></div>
+              <div style="font-size: 11px; color: #64748b">
+                Only admin can create or remove employee accounts. Employees can
+                log in only with credentials configured here.
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <i class="fa-solid fa-users"></i>
+                  Employees list
+                </div>
+                <div class="panel-actions">
+                  <button class="btn-xs" type="button" id="btnResetDemoEmployees">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    Add demo employees
+                  </button>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Contact</th>
+                      <th>User ID</th>
+                      <th>Assigned clients</th>
+                      <th>Last Active</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="employeesTableBody">
+                    <!-- JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CLIENTS VIEW -->
+        <section class="view" id="view-clients" style="display: none">
+          <div class="tab-layout">
+            <div class="panel admin-only">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <i class="fa-solid fa-diagram-project"></i>
+                  Assign clients to employees
+                </div>
+                <div class="panel-actions">
+                  <select id="assignEmployeeSelect" class="select-control" style="max-width: 170px">
+                    <option value="">Select employee</option>
+                  </select>
+                  <button class="btn-outline" type="button" id="btnAssignSelected">
+                    <i class="fa-solid fa-share-from-square"></i>
+                    Assign selected
+                  </button>
+                  <div style="
+                        font-size: 11px;
+                        color: #64748b;
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                      ">
+                    <span class="pill-dot"></span>
+                    Admin-only assignment
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <i class="fa-solid fa-users-rectangle"></i>
+                  Client list
+                </div>
+                <div class="panel-actions">
+                  <select id="clientStatusFilter" class="select-control" style="max-width: 150px">
+                    <option value="">All statuses</option>
+                    <option>Not Received</option>
+                    <option>Busy</option>
+                    <option>Not Incoming</option>
+                    <option>Interested</option>
+                    <option>Not Interested</option>
+                    <option>Follow-up</option>
+                    <option>Converted</option>
+                  </select>
+                  <select id="clientEmployeeFilter" class="select-control admin-only" style="max-width: 160px">
+                    <option value="">All employees</option>
+                  </select>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>
+                        <input type="checkbox" id="selectAllClients" />
+                      </th>
+                      <th>Client</th>
+                      <th>Contact</th>
+                      <th>Assigned To</th>
+                      <th>Status</th>
+                      <th>Call / WhatsApp</th>
+                      <th>Feedback</th>
+                      <th>Updated At</th>
+                    </tr>
+                  </thead>
+                  <tbody id="clientsTableBody">
+                    <!-- JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FEEDBACK VIEW -->
+        <section class="view" id="view-feedback" style="display: none">
+          <div class="tab-layout">
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <i class="fa-solid fa-comments"></i>
+                  Employee feedback & call logs
+                </div>
+                <div class="panel-actions">
+                  <select id="feedbackEmployeeFilter" class="select-control admin-only" style="max-width: 160px">
+                    <option value="">All employees</option>
+                  </select>
+                  <select id="feedbackStatusFilter" class="select-control" style="max-width: 150px">
+                    <option value="">All statuses</option>
+                    <option>Not Received</option>
+                    <option>Busy</option>
+                    <option>Not Incoming</option>
+                    <option>Interested</option>
+                    <option>Not Interested</option>
+                    <option>Follow-up</option>
+                    <option>Converted</option>
+                  </select>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Client</th>
+                      <th>Employee</th>
+                      <th>Status</th>
+                      <th>Feedback</th>
+                      <th>Updated At</th>
+                    </tr>
+                  </thead>
+                  <tbody id="feedbackTableBody">
+                    <!-- JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- IMPORT / EXPORT VIEW -->
+        <section class="view" id="view-importExport" style="display: none">
+          <div class="tab-layout">
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <i class="fa-solid fa-file-import"></i>
+                  Upload client data (CSV / XLSX)
+                </div>
+                <div class="panel-actions">
+                  <span class="chip">
+                    <i class="fa-solid fa-circle-info"></i>
+                    File stays in browser memory only
+                  </span>
+                </div>
+              </div>
+              <div class="form-grid">
+                <div class="form-field">
+                  <label class="form-label">
+                    Select CSV or Excel file
+                    <span>Columns: Name, Phone, Email (optional)</span>
+                  </label>
+                  <input type="file" id="clientFileInput"
+                    accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                </div>
+                <div class="form-field">
+                  <label class="form-label">&nbsp;</label>
+                  <button type="button" class="btn-outline" id="btnParseFile">
+                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                    Import & preview
+                  </button>
+                </div>
+              </div>
+              <div class="divider"></div>
+              <div style="font-size: 11px; color: #64748b">
+                This demo parses CSV using the browser FileReader API. Excel
+                (XLSX) parsing can be integrated with a library like SheetJS if
+                you include it separately.
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <i class="fa-solid fa-file-export"></i>
+                  Export data (CSV)
+                </div>
+                <div class="panel-actions">
+                  <button type="button" class="btn-outline" id="btnExportClients">
+                    <i class="fa-solid fa-download"></i>
+                    Export clients CSV
+                  </button>
+                  <button type="button" class="btn-outline" id="btnExportPerformance">
+                    <i class="fa-solid fa-download"></i>
+                    Export performance CSV
+                  </button>
+                </div>
+              </div>
+              <div style="font-size: 12px; color: #4b5563">
+                Export includes all client rows with current status, feedback,
+                and employee mappings, plus aggregated performance metrics per
+                employee.
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toastMessage">Saved</span>
+    <button type="button" id="toastClose">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
