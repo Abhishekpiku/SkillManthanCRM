@@ -1027,8 +1027,9 @@ function updateSidebarTime() {
 updateSidebarTime();
 setInterval(updateSidebarTime, 60 * 1000);
 
-<a href="https://wa.me/919278361443" target="_blank">
-  WhatsApp
-</a>
+// <a href="https://wa.me/919278361443" target="_blank">
+//   WhatsApp
+// </a>
+
 
 
