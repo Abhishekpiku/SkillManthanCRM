@@ -460,20 +460,20 @@ function renderEmployeesTable() {
 document
   .getElementById("btnResetDemoEmployees")
   .addEventListener("click", () => {
-    const demo = [
-      {
-        name: "Abhishek",
-        contact: "rahul@example.com",
-        userId: "Abhishek",
-        password: "123456",
-      },
-      {
-        name: "Anchal",
-        contact: "priya@example.com",
-        userId: "Anchal",
-        password: "123456",
-      },
-    ];
+    // const demo = [
+    //   {
+    //     name: "Abhishek",
+    //     contact: "rahul@example.com",
+    //     userId: "Abhishek",
+    //     password: "123456",
+    //   },
+    //   {
+    //     name: "Anchal",
+    //     contact: "priya@example.com",
+    //     userId: "Anchal",
+    //     password: "123456",
+    //   },
+    // ];
     for (const d of demo) {
       if (state.users.some((u) => u.userId === d.userId)) continue;
       state.users.push({
@@ -1030,6 +1030,7 @@ setInterval(updateSidebarTime, 60 * 1000);
 // <a href="https://wa.me/919278361443" target="_blank">
 //   WhatsApp
 // </a>
+
 
 
 
